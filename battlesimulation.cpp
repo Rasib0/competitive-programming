@@ -1,4 +1,6 @@
 #include <iostream>
+#include <unordered_map>
+
 using namespace std;
 
 // Algorithm: Brute Force
@@ -10,47 +12,33 @@ int main() {
   string input;
   string output;
 
+  unordered_map<char, char> moves_map;
+
+  moves_map['R'] = 'S';
+  moves_map['B'] = 'K';
+  moves_map['L'] = 'H';
+
   cin >> input;
-  int length = input.length();
-  bool last_three_flag[3];
-  // first two characters
-  for (int i = 2; i < length; i++) {
-    last_three_flag[0] = false;
-    last_three_flag[1] = false;
-    last_three_flag[2] = false;
 
-    for (int j = 0; j < 3; j++) {
+  for (int i = 0; i < input.size(); i++) {
 
-      if (input[i - j] == 'R') {
-        last_three_flag[0] = true;
+    // if we can't see the next next character
+    if (i + 2 >= input.size()) {
+      // print the remaining strings
+      for (int j = i; j < input.size(); j++) {
+        printf("%c", moves_map[input[j]]);
       }
-
-      if (input[i - j] == 'B') {
-        last_three_flag[1] = true;
-      }
-
-      if (input[i - j] == 'L') {
-        last_three_flag[2] = true;
-      }
+      break;
     }
-
-    if (last_three_flag[0] && last_three_flag[1] && last_three_flag[2]) {
+    // if the three moves are distinct
+    if (input[i] != input[i + 1] and input[i + 1] != input[i + 2] and
+        input[i] != input[i + 2]) {
       printf("C");
-      last_three_flag[0] = false;
-      last_three_flag[1] = false;
-      last_three_flag[2] = false;
-
       i += 2;
-    }
-
-    if (input[i] == 'R') {
-      printf("S");
-    } else if (input[i] == 'B') {
-      printf("K");
-    } else if (input[i] == 'L') {
-      printf("H");
+    } else {
+      printf("%c", moves_map[input[i]]);
     }
   }
-
+  printf("\n");
   return 0;
 }
