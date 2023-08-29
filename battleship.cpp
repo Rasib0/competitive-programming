@@ -23,6 +23,9 @@ int main() {
     bool map1_isempty = false;
     int w, h, n;
     cin >> w >> h >> n;
+    // cout << "New w: " << w << endl;
+    // cout << "New h: " << h << endl;
+    // cout << "New n: " << n << endl;
 
     vector<vector<char>> map1(h, vector<char>(w));
 
@@ -58,8 +61,7 @@ int main() {
         y = h - 1 - y;
 
         turn_count++;
-        cout << "Turn " << turn_count << endl;
-        cout << "Player 2 shoots at " << x << "," << -(y - h + 1) << endl;
+        // cout << "Player 1 shoots at " << x << "," << -(y - h + 1) << endl;
 
         // if player1 hits, he may continue if more ships are left
         if (map2[y][x] == '#') {
@@ -82,8 +84,7 @@ int main() {
         y = h - 1 - y;
 
         turn_count++;
-        cout << "Turn " << turn_count << endl;
-        cout << "Player 2 shoots at " << x << "," << -(y - h + 1) << endl;
+        // cout << "Player 2 shoots at " << x << "," << -(y - h + 1) << endl;
 
         // if player2 hits, he gets another turn
         if (map1[y][x] == '#') {
@@ -97,13 +98,12 @@ int main() {
         } else {
           player1_has_turn = true;
         }
-      }
-
-      if (map2_isempty or map1_isempty) {
-        if (not player1_has_turn and map2_isempty) {
-          continue;
+        if (map2_isempty or map1_isempty) {
+          if (not player1_has_turn and map2_isempty) {
+            continue;
+          }
+          break;
         }
-        break;
       }
     }
 

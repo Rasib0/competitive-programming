@@ -51,6 +51,7 @@ int main() {
       y = h - 1 - y;
 
       if (p1_turn) {
+        cout << "Player 1 shoots at " << x << ", " << -(y + 1 - h) << endl;
         if (player2_ships[y][x] == '#') {
           player2_ships[y][x] = '_';
 
@@ -63,6 +64,7 @@ int main() {
         }
 
       } else {
+        cout << "Player 2 shoots at " << x << ", " << -(y + 1 - h) << endl;
         if (player1_ships[y][x] == '#') {
           player1_ships[y][x] = '_';
 
