@@ -3,7 +3,7 @@
 
 using namespace std;
 
-bool contains(const vector<vector<char>> &map, char x) {
+bool vector_contains(const vector<vector<char>> &map, char x) {
   for (const auto &row : map) {
     for (const auto &ship : row) {
       if (ship == x) {
@@ -15,49 +15,108 @@ bool contains(const vector<vector<char>> &map, char x) {
 }
 
 int main() {
-  int test_cases;
-  int w, h, n;
-
+  size_t test_cases;
   cin >> test_cases;
 
-  for (int t = 0; t < test_cases; t++) {
+  for (size_t t = 0; t < test_cases; t++) {
+    bool map2_isempty = false;
+    bool map1_isempty = false;
+    int w, h, n;
     cin >> w >> h >> n;
 
-    vector<vector<char>> player1_map(h, vector<char>(w));
+    vector<vector<char>> map1(h, vector<char>(w));
 
+    // Read the maps for player 1
     for (int i = 0; i < h; i++) {
       for (int j = 0; j < w; j++) {
-        cin >> player1_map[i][j];
+        cin >> map1[i][j];
       }
     }
 
-    vector<vector<char>> player2_map(h, vector<char>(w));
+    vector<vector<char>> map2(h, vector<char>(w));
 
+    // Read the maps for player 2
     for (int i = 0; i < h; i++) {
       for (int j = 0; j < w; j++) {
-        cin >> player2_map[i][j];
+        cin >> map2[i][j];
       }
     }
 
     size_t x, y;
-    for (int i = 0; i < n; i++) {
 
-      cin >> x >> y;
-      y = h - 1 - y;
+    bool player1_has_turn = true; // player1's turn
 
-      player1_map[y][x] = '_';
-      player2_map[y][x] = '_';
+    int turn_count = 0;
 
-      if (!contains(player1_map, '#')) {
-        cout << "player 2 wins" << endl;
-        break;
+    // ------------------- GAME LOOP ------------------- //
+    while (turn_count < n) {
+
+      // player 1 turn to shoot
+      while (player1_has_turn and turn_count < n) {
+
+        cin >> x >> y;
+        y = h - 1 - y;
+
+        turn_count++;
+        cout << "Turn " << turn_count << endl;
+        cout << "Player 2 shoots at " << x << "," << -(y - h + 1) << endl;
+
+        // if player1 hits, he may continue if more ships are left
+        if (map2[y][x] == '#') {
+          map2[y][x] = '_';
+
+          if (not vector_contains(map2, '#')) {
+            map2_isempty = true;
+            player1_has_turn = false;
+          }
+
+        } else {
+          player1_has_turn = false;
+        }
       }
 
-      if (!contains(player2_map, '#')) {
-        cout << "player 1 wins" << endl;
+      // player 2 turn to shoot
+      while (not player1_has_turn and turn_count < n) {
+
+        cin >> x >> y;
+        y = h - 1 - y;
+
+        turn_count++;
+        cout << "Turn " << turn_count << endl;
+        cout << "Player 2 shoots at " << x << "," << -(y - h + 1) << endl;
+
+        // if player2 hits, he gets another turn
+        if (map1[y][x] == '#') {
+          map1[y][x] = '_';
+          // if  enemy has other ships left, player2 may continue
+          if (not vector_contains(map1, '#')) {
+            map1_isempty = true;
+            player1_has_turn = true;
+          }
+
+        } else {
+          player1_has_turn = true;
+        }
+      }
+
+      if (map2_isempty or map1_isempty) {
+        if (not player1_has_turn and map2_isempty) {
+          continue;
+        }
         break;
       }
     }
+
+    if (map2_isempty and map1_isempty) {
+      cout << "draw" << endl;
+    } else if (map2_isempty) {
+      cout << "player one wins" << endl;
+    } else if (map1_isempty) {
+      cout << "player two wins" << endl;
+    } else {
+      cout << "draw" << endl;
+    }
   }
+
   return 0;
 }
