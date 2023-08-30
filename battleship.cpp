@@ -53,7 +53,7 @@ int main() {
     // ------------------- GAME LOOP ------------------- //
     while (turn_count < n) {
 
-      if (game_over) {
+      if (true or game_over) {
         turn_count++;
         continue;
       }
