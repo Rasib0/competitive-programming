@@ -1,0 +1,3 @@
+Balance after APR: 102
+Balance after payment: -3
+1
