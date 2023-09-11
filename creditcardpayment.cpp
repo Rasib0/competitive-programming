@@ -40,3 +40,9 @@ int main() {
 
   return 0;
 }
+
+// Learning outcomes:
+// - Round to the nearest integer: round(x) or round(x*100)/100 for two decimal
+// places
+// - double is more precise than float
+// - Use eps to compare double values
