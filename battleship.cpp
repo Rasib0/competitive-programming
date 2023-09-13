@@ -3,10 +3,10 @@
 
 using namespace std;
 
-bool hasShipsLeft(const vector<vector<char>> &map) {
-  for (const auto &row : map) {
-    for (const auto &ship : row) {
-      if (ship == '#') {
+bool hasShipsLeft(vector<vector<char>> &map) {
+  for (auto row : map) {
+    for (auto entry : row) {
+      if (entry == '#') {
         return true;
       }
     }
@@ -15,110 +15,89 @@ bool hasShipsLeft(const vector<vector<char>> &map) {
 }
 
 int main() {
-  size_t test_cases;
-  cin >> test_cases;
+  size_t t;
+  cin >> t;
 
-  for (size_t t = 0; t < test_cases; t++) {
-    int w, h, n;
+  for (size_t i = 0; i < t; i++) {
+    size_t w, h, n;
     cin >> w >> h >> n;
-    // cout << "New w: " << w << endl;
-    // cout << "New h: " << h << endl;
-    // cout << "New n: " << n << endl;
 
-    vector<vector<char>> map1(h, vector<char>(w));
+    vector<vector<char>> player2_ships(h, vector<char>(w));
+    vector<vector<char>> player1_ships(h, vector<char>(w));
+    vector<pair<size_t, size_t>> moves;
 
-    // Read the maps for player 1
-    for (int i = 0; i < h; i++) {
-      for (int j = 0; j < w; j++) {
-        cin >> map1[i][j];
+    for (size_t i = 0; i < h; i++) {
+      for (size_t j = 0; j < w; j++) {
+        cin >> player1_ships[i][j];
       }
     }
 
-    vector<vector<char>> map2(h, vector<char>(w));
-
-    // Read the maps for player 2
-    for (int i = 0; i < h; i++) {
-      for (int j = 0; j < w; j++) {
-        cin >> map2[i][j];
+    for (size_t i = 0; i < h; i++) {
+      for (size_t j = 0; j < w; j++) {
+        cin >> player2_ships[i][j];
       }
     }
 
-    size_t x, y;
+    for (size_t i = 0; i < n; i++) {
+      size_t x, y;
+      cin >> x >> y;
+      moves.push_back(make_pair(x, y));
+    }
 
-    bool player1_has_turn = true; // player1's turn
-    bool game_over = false;
+    bool p1_turn = true;
+    for (size_t i = 0; i < n; i++) {
+      size_t x = moves[i].first;
+      size_t y = moves[i].second;
+      y = h - 1 - y;
 
-    int turn_count = 0;
+      if (p1_turn) {
+        cout << "Player 1 shoots at " << x << ", " << -(y + 1 - h) << endl;
+        if (player2_ships[y][x] == '#') {
+          player2_ships[y][x] = '_';
 
-    // ------------------- GAME LOOP ------------------- //
-    while (turn_count < n) {
-
-      if (true or game_over) {
-        turn_count++;
-        continue;
-      }
-      // player 1 turn to shoot
-      while (player1_has_turn and turn_count < n) {
-
-        cin >> x >> y;
-        y = h - 1 - y;
-
-        turn_count++;
-        //cout << "Player 1 shoots at " << x << "," << -(y - h + 1) << endl;
-
-        // if player1 hits, he may continue if more ships are left
-        if (map2[y][x] == '#') {
-          map2[y][x] = '_';
-
-          if (not hasShipsLeft(map2)) {
-            player1_has_turn = false;
+          if (!hasShipsLeft(player2_ships)) {
+            p1_turn = false;
           }
 
         } else {
-          player1_has_turn = false;
+          p1_turn = false;
         }
-      }
 
-      // player 2 turn to shoot
-      while (not player1_has_turn and turn_count < n) {
+      } else {
+        cout << "Player 2 shoots at " << x << ", " << -(y + 1 - h) << endl;
+        if (player1_ships[y][x] == '#') {
+          player1_ships[y][x] = '_';
 
-        cin >> x >> y;
-        y = h - 1 - y;
-
-        turn_count++;
-        //cout << "Player 2 shoots at " << x << "," << -(y - h + 1) << endl;
-
-        // if player2 hits, he gets another turn
-        if (map1[y][x] == '#') {
-          map1[y][x] = '_';
-          // if  enemy has other ships left, player2 may continue
-          if (not hasShipsLeft(map1)) {
-            player1_has_turn = true;
+          if (!hasShipsLeft(player1_ships)) {
+            p1_turn = true;
           }
 
         } else {
-          player1_has_turn = true;
+          p1_turn = true;
         }
-        if (not hasShipsLeft(map1) or not hasShipsLeft(map2)) {
-          if (not player1_has_turn and not hasShipsLeft(map2)) {
-            continue;
-          }
-          game_over = true;
-          break;
+      }
+
+      if (not hasShipsLeft(player2_ships) or not hasShipsLeft(player1_ships)) {
+        // don't end on a p1_turn
+        if ((not p1_turn) and (not hasShipsLeft(player2_ships))) {
+          continue;
         }
+        break;
       }
     }
 
-    if (hasShipsLeft(map1) and hasShipsLeft(map2)) {
+    bool a = hasShipsLeft(player1_ships);
+    bool b = hasShipsLeft(player2_ships);
+
+    if (a and b) {
       cout << "draw" << endl;
-    } else if (hasShipsLeft(map1)) {
+    } else if (a) {
       cout << "player one wins" << endl;
-    } else if (hasShipsLeft(map2)) {
+    } else if (b) {
       cout << "player two wins" << endl;
     } else {
       cout << "draw" << endl;
     }
   }
-
   return 0;
 }
