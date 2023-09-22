@@ -54,13 +54,12 @@ int main() {
       const pair neightbour{x + delta_x, y + delta_y};
 
       if (coordinates.count(neightbour) > 0) {
+        cout << num_of_lines;
         num_of_lines++;
       }
     }
   }
-  // why is each point counted twice.
-  // because if you can go point A to B in 2018 radius
-  // then you can also go from point B to A in 2018 radius!
+
   std::cout << num_of_lines / 2 << endl;
   return 0;
 }
