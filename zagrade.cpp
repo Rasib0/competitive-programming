@@ -1,5 +1,6 @@
 #include <algorithm>
 #include <iostream>
+#include <set>
 #include <stack>
 #include <vector>
 
@@ -10,7 +11,7 @@ int main() {
   cin >> s;
 
   vector<pair<int, int>> bracket_pairs;
-  vector<string> list;
+  set<string> list;
 
   stack<int> open_brackets;
 
@@ -26,7 +27,7 @@ int main() {
   }
 
   // for each subset of brackets store the string in ans
-  for (int i = 1; i <= (1 << bracket_pairs.size()); i++) {
+  for (int i = 1; i < (1 << bracket_pairs.size()); i++) {
     string temp = s;
     for (int j = 0; j < bracket_pairs.size(); j++) {
       // if the jth bit is set, remove the jth bracket pair
@@ -38,10 +39,8 @@ int main() {
 
     // remove all spaces
     temp.erase(remove(temp.begin(), temp.end(), '$'), temp.end());
-    list.push_back(temp);
+    list.insert(temp);
   }
-
-  sort(list.begin(), list.end());
 
   for (auto &element : list) {
     cout << element << endl;
