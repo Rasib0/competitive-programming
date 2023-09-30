@@ -41,18 +41,19 @@ int main() {
   }
 
   int lo = 0;
-
   // why 1000000001?
-  // if we did 1000000000 then lo would never be able to reach 1000000000 so
-  // need to do
-  // + 1 so that lo reaches 1000000001 too
-  int hi = 1000000001;
+  // if we did 1000000000 then lo would never be able to reach 1000000000
+  // so need + 1 so that lo reaches 1000000001 too
+  // (don't need it anymore since I added final check)
+  int hi = 1000000000;
 
-  // we need the to single out smallest weight where both are paired
-  int mid = 0;
+  // range is 1, 3 -> mid is 2.  the minimun weight that works:
+  // case 1: mid = 2 ->  works -> stop at 1,2
+  // case 2: mid = 2 ->  works -> stop at 1,2
+  // case 3: mid = 2 -> !works -> stop at 2,3
 
   while (lo + 1 < hi) {
-    mid = lo + (hi - lo) / 2; // (99 + 100)/ 2 = 99
+    int mid = lo + (hi - lo) / 2; // (99 + 100)/ 2 = 99
     bool works = isPaired(a, mid) and isPaired(b, mid);
     if (works) {
       hi = mid;
@@ -64,7 +65,7 @@ int main() {
   if (isPaired(a, lo) and isPaired(b, lo)) {
     cout << lo << endl;
   } else {
-    cout << mid << endl;
+    cout << lo + 1 << endl;
   }
 
   return 0;
