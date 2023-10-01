@@ -108,33 +108,52 @@ vector<bool> sieve(long long upperbound) {
 
 // precalculation
 int main() {
-  int upper_bound = 1e3;
+  int upper_bound = 1e9;
 
-  vector<bool> primes = sieve(upper_bound);
-  vector<int> a_wins;
+  vector<bool> primes = sieve(upper_bound + 1);
+  vector<int> primes_list;
+
+  for (int i = 0; i <= upper_bound + 1; i++) {
+    if (primes[i]) {
+      primes_list.push_back(i);
+    }
+  }
+
+  vector<bool> a_wins(upper_bound + 1, false);
   vector<int> b_wins;
 
+  a_wins[0] = false; // if alive gets 0 stones on her turn, she has lost
   a_wins[1] = true;
   a_wins[2] = true;
 
   for (int i = 0; i <= upper_bound; i++) {
-    if (a_wins[i])
-      continue;
 
-    for (auto prime : primes) {
-      int canidate = i + prime - 1;
-      if (canidate <= upper_bound) {
-        a_wins[canidate] = true;
-      } else {
+    if (a_wins[i]) {
+      continue;
+    }
+    // at i , alice loses, so i + prime - 1 is a win for alice
+    // sieve out all the numbers that will be a win for alice
+    for (int prime : primes_list) {
+      int canidate = i + (prime - 1);
+
+      if (canidate > upper_bound) {
         break;
       }
+
+      a_wins[canidate] = true;
     }
-    b_wins.push_back(i);
   }
 
+  for (int i = 1; i <= upper_bound; i++) {
+    if (a_wins[i] == false) {
+      b_wins.push_back(i);
+    }
+  }
   for (auto &i : b_wins) {
     cout << i << ", ";
   }
+
+  cout << endl;
 
   return 0;
 }
