@@ -5,7 +5,7 @@
 
 using namespace std;
 
-int main2() {
+int main() {
   int testcases;
   cin >> testcases; // 1 to 100
 
@@ -73,13 +73,11 @@ int main2() {
       629403143, 713858034, 713858037, 739002982, 739002985, 809065744,
       809065747, 813583138, 813583141, 822228058, 822228061, 830259270,
       830259273, 834828324, 834828327, 916215504, 916215507, 978364206,
-      978364209,
-  };
+      978364209};
 
   for (int i = 0; i < testcases; i++) {
     int N;
     cin >> N; // 1 <= N <= 10^9
-              //
     if (find(bob_wins.begin(), bob_wins.end(), N) != bob_wins.end()) {
       cout << "Bob" << endl;
       continue;
@@ -106,10 +104,10 @@ vector<bool> sieve(long long upperbound) {
   return primes;
 }
 
-// precalculation
-int main() {
+int precalculation() {
   int upper_bound = 1e9;
 
+  cout << "Sieveing..." << endl;
   vector<bool> primes = sieve(upper_bound + 1);
   vector<int> primes_list;
 
@@ -126,6 +124,7 @@ int main() {
   a_wins[1] = true;
   a_wins[2] = true;
 
+  cout << "Sieving done... now solving " << endl;
   for (int i = 0; i <= upper_bound; i++) {
 
     if (a_wins[i]) {
@@ -149,6 +148,7 @@ int main() {
       b_wins.push_back(i);
     }
   }
+
   for (auto &i : b_wins) {
     cout << i << ", ";
   }
