@@ -1,13 +1,13 @@
+
 #include <algorithm>
 #include <iostream>
-#include <iterator>
 #include <vector>
 #define int long long int
 
 using namespace std;
 
 bool b_is_earlier(vector<int> &a, vector<int> &b) {
-  for (int i = 0; i < a.size(); i++) {
+  for (int i = 0; i < b.size(); i++) {
     if (a[i] < b[i]) {
       return false;
     }
@@ -46,6 +46,11 @@ int32_t main() {
 
       for (int j = 0; j < i; j++) {
 
+        if (v[j] > v[i]) {
+          // continue;
+        }
+        // if you can make maximum from any previous entry
+        // and that prev entry is earlier then curr is maximum index
         if (memo[j] + 1 == maximum and b_is_earlier(paths[i], paths[j])) {
           maximum_index = i;
         }
@@ -54,18 +59,21 @@ int32_t main() {
           continue;
         }
 
+        if (memo[j] + 1 >= memo[i]) {
+          paths[i].clear();
+          for (auto &node : paths[j]) {
+            paths[i].push_back(node);
+          }
+          paths[i].push_back(v[i]);
+        }
+
         if (memo[j] + 1 > memo[i]) {
           memo[i] = memo[j] + 1;
-
           if (memo[i] > maximum) {
             maximum = memo[i];
             maximum_index = i;
           }
         }
-
-        paths[i].clear();
-        copy(paths[j].begin(), paths[j].end(), back_inserter(paths[i]));
-        paths[i].push_back(v[i]);
       }
     }
 
