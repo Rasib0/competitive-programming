@@ -1,12 +1,12 @@
 #include <algorithm>
 #include <iostream>
+#include <iterator>
 #include <vector>
 #define int long long int
 
 using namespace std;
 
 bool b_is_earlier(vector<int> &a, vector<int> &b) {
-
   for (int i = 0; i < a.size(); i++) {
     if (a[i] < b[i]) {
       return false;
@@ -31,14 +31,14 @@ int32_t main() {
     vector<int> memo(n, 1);
     vector<vector<int>> paths(n, vector<int>());
 
-    int maximum = 1;
-    int maximum_index = 0;
-
-    // for each entry in the memo store the lexographicaly smallest sequence
-    // to get that index
+    // for each entry in the memo
+    // store the lexographicaly smallest sequence lto get that index
     for (int i = 0; i < n; i++) {
       cin >> v[i];
     }
+
+    int maximum = 1;
+    int maximum_index = min_element(v.begin(), v.end()) - v.begin();
 
     for (int i = 0; i < n; i++) {
 
@@ -54,18 +54,6 @@ int32_t main() {
           continue;
         }
 
-        if (memo[j] + 1 == memo[i]) {
-          if (b_is_earlier(paths[i], paths[j])) {
-            paths[i].clear();
-
-            for (auto &node : paths[j]) {
-              paths[i].push_back(node);
-            }
-
-            paths[i].push_back(v[i]);
-          }
-        }
-
         if (memo[j] + 1 > memo[i]) {
           memo[i] = memo[j] + 1;
 
@@ -73,15 +61,11 @@ int32_t main() {
             maximum = memo[i];
             maximum_index = i;
           }
-
-          paths[i].clear();
-
-          for (auto &node : paths[j]) {
-            paths[i].push_back(node);
-          }
-
-          paths[i].push_back(v[i]);
         }
+
+        paths[i].clear();
+        copy(paths[j].begin(), paths[j].end(), back_inserter(paths[i]));
+        paths[i].push_back(v[i]);
       }
     }
 
