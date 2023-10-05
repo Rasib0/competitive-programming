@@ -53,8 +53,10 @@ int main() {
   // case 3: mid = 2 -> !works -> stop at 2,3
 
   while (lo + 1 < hi) {
+
     int mid = lo + (hi - lo) / 2; // (99 + 100)/ 2 = 99
     bool works = isPaired(a, mid) and isPaired(b, mid);
+
     if (works) {
       hi = mid;
     } else {
