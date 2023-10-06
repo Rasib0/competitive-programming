@@ -47,11 +47,13 @@ int32_t main() {
       for (int j = 0; j < i; j++) {
 
         if (v[j] > v[i]) {
-          // continue;
+          continue;
         }
         // if you can make maximum from any previous entry
-        // and that prev entry is earlier then curr is maximum index
-        if (memo[j] + 1 == maximum and b_is_earlier(paths[i], paths[j])) {
+        // and that prev entry is earlier then maximum index path is maximum
+        // index
+        if (memo[j] + 1 == maximum and
+            b_is_earlier(paths[maximum_index], paths[j])) {
           maximum_index = i;
         }
 
