@@ -6,6 +6,7 @@
 
 using namespace std;
 
+// assumption b: is smaller than a
 bool b_is_earlier(vector<int> &a, vector<int> &b) {
   for (int i = 0; i < b.size(); i++) {
     if (a[i] < b[i]) {
@@ -49,9 +50,7 @@ int32_t main() {
         if (v[j] > v[i]) {
           continue;
         }
-        // if you can make maximum from any previous entry
-        // and that prev entry is earlier then maximum index path is maximum
-        // index
+
         if (memo[j] + 1 == maximum and
             b_is_earlier(paths[maximum_index], paths[j])) {
           maximum_index = i;
@@ -61,7 +60,8 @@ int32_t main() {
           continue;
         }
 
-        if (memo[j] + 1 >= memo[i]) {
+        if ((memo[j] + 1 == memo[i] and b_is_earlier(paths[i], paths[j])) or
+            memo[j] + 1 > memo[i]) {
           paths[i].clear();
           for (auto &node : paths[j]) {
             paths[i].push_back(node);
