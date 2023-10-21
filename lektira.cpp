@@ -17,7 +17,6 @@ int main() {
       string second_word = input.substr(i, j - i);
       string third_word = input.substr(j);
 
-      reverse(first_word.begin(), first_word.end());
       reverse(second_word.begin(), second_word.end());
       reverse(third_word.begin(), third_word.end());
 

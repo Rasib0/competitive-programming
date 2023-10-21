@@ -17,7 +17,9 @@ int main() {
 
     vector<char> bits(32, '?');
 
-    for (int i = 0; i < n; i++) {
+    sort(bits.begin(), bits.end(), [](int a, int b) { return a < b; })
+
+        for (int i = 0; i < n; i++) {
 
       string opt_code{};
       cin >> opt_code;
