@@ -88,8 +88,8 @@ int knapsack_bottomup(vector<int> &w, vector<int> &p, vector<vector<int>> &memo,
 // subset target sum  + knapsack
 int main() {
   vector<int> w = {1, 4, 2};
-  vector<int> p = {2, 3, 3};
-  int size = 23;
+  vector<int> p = {2, 8, 4};
+  int size = 5;
 
   unordered_map<int, int> prev_unbound;
   unordered_map<int, int> memo_unbound;
@@ -107,5 +107,25 @@ int main() {
   vector<vector<int>> memo_bu(w.size() + 1, vector<int>(size + 1, 0));
   int profit_bottomup = knapsack_bottomup(w, p, memo_bu, size, w.size());
   cout << "Profit Bottomup: " << profit_bottomup << endl;
+
+  int ii = w.size();
+  int jj = size;
+
+  for (int i = 0; i < w.size() + 1; i++) {
+    for (int j = 0; j < size + 1; j++) {
+      cout << memo_bu[i][j] << " ";
+    }
+    cout << endl;
+  }
+
+  while (ii > 0 and jj > 0) {
+    if (memo_bu[ii][jj] != memo_bu[ii - 1][jj]) {
+      jj -= w[ii - 1];
+      cout << w[ii - 1] << " ";
+    }
+    ii--;
+  }
+  cout << endl;
+
   return 0;
 }
