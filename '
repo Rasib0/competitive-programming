@@ -1,0 +1,110 @@
+#include <algorithm>
+#include <iostream>
+#include <limits>
+#include <set>
+#include <vector>
+#define int long long int
+#define endl "\n"
+#define vec vector
+#define IOS                                                                    \
+  ios::sync_with_stdio(0);                                                     \
+  cin.tie(0);                                                                  \
+  cout.tie(0);
+
+using namespace std;
+
+int target_sum(int T, vec<int> &v, vec<vec<int>> &memo, set<vec<int>> &paths,
+               vec<int> &path) {
+  if (T < 0) {
+    return numeric_limits<int>::min();
+  }
+  if (T == 0) {
+    // avoid duplicates in paths
+    sort(path.begin(), path.end());
+    paths.insert(path);
+    memo[T] = path;
+    return 0;
+  }
+  if (!memo[T].empty()) {
+    return 0;
+  }
+
+  int maxi = 0;
+  for (int i = 0; i < v.size(); i++) {
+    // backtracking
+    path.push_back(i + 1);
+    vec<int> path_copy(path);
+
+    int profit = target_sum(T - v[i], v, memo, paths, path_copy) + v[i];
+
+    if (profit > maxi) {
+      maxi = profit;
+    }
+
+    path.pop_back();
+  }
+
+  memo[T] = path;
+  return maxi;
+}
+
+void findPaths(int T, vector<int> &weights, vector<int> &values,
+               vector<int> &path, set<vector<int>> &paths, int index) {
+  if (T == 0) {
+    sort(path.begin(), path.end());
+    paths.insert(path);
+    return;
+  }
+
+  for (int i = index; i < weights.size(); i++) {
+    if (T >= weights[i]) {
+      path.push_back(i + 1);
+      vector<int> path_copy(path);
+      findPaths(T - weights[i], weights, values, path_copy, paths, i);
+      path.pop_back();
+    }
+  }
+}
+
+int32_t main() {
+  IOS;
+
+  // input
+  int N;
+  cin >> N;
+  vec<int> v(N);
+  for (int i = 0; i < N; i++) {
+    cin >> v[i];
+  }
+
+  int M;
+  cin >> M;
+  vec<int> t(M);
+  for (int i = 0; i < M; i++) {
+    cin >> t[i];
+  }
+
+  // solve for each testcases
+  for (int i = 0; i < M; i++) {
+    vec<int> memo(t[i] + 1, -1);
+
+    vec<int> path_dummy;
+
+    set<vec<int>> paths; // outputs all the paths with maximum profit
+    // target_sum(t[i], v, memo, paths, path_dummy);
+
+    findPaths(t[i], v, v, path_dummy, paths, 0);
+    if (paths.size() == 0)
+      cout << "Impossible" << endl;
+    else if (paths.size() > 1)
+      cout << "Ambiguous" << endl;
+    else {
+      for (auto x : *paths.begin()) {
+        cout << x << " ";
+      }
+      cout << endl;
+    }
+  }
+
+  return 0;
+}
