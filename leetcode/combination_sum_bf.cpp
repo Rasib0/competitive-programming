@@ -4,6 +4,7 @@ using namespace std;
 
 class Solution {
 public:
+  // Brute force solution, (my old code)
   void dfs(vector<int> &candidates, int target, int index, vector<int> &path,
            vector<vector<int>> &result) {
     if (target < 0) {

@@ -21,7 +21,6 @@ def unboundedKnapsack(w:list, v:list, target:int):
 
 
 
-print(unboundedKnapsack([1, 2, 3], [15, 20, 50], 5)) # 80
 
 
 
@@ -53,5 +52,6 @@ def coinChangeTopDown(amount, coins):
 
      return dfs(0, amount)
 
+print(unboundedKnapsack([1, 2, 3], [15, 20, 50], 5)) # 80
 print(coinChange1D(7, [1, 3, 5])) # 4
 print(coinChangeTopDown(7, [1, 3, 5])) # 4

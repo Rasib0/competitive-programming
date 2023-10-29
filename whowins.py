@@ -3,7 +3,7 @@ lines = sys.stdin.read().splitlines()
 board = [list(filter(lambda x: x != ' ', line)) for line in lines]
 
 # check row
-winner = 'N'
+winner = 'Tie'
 
 for i in range(3):
     if board[i][0] == board[i][1] == board[i][2] != '_':

@@ -37,9 +37,9 @@ void combination_sum(int T, int index, vector<int> &v, int &count,
     return;
   }
 
-  if (count > 1) {
-    return;
-  }
+  // if (count > 1) {
+  //   return;
+  // }
 
   if (T == 0) {
     count++;
