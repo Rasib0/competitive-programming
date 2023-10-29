@@ -3,6 +3,8 @@
 #include <limits>
 #include <numeric>
 #include <set>
+#include <unordered_map>
+#include <utility>
 #include <vector>
 
 #define int long long int
@@ -13,29 +15,42 @@
   cin.tie(0);                                                                  \
   cout.tie(0);
 
-// TODO
 using namespace std;
 
-void combination_sum(int T, int index, vector<int> &v, set<vector<int>> &paths,
-                     vector<int> &path) {
+struct PairHash {
+  template <typename T1, typename T2>
+  auto operator()(const pair<T1, T2> &p) const -> size_t {
+    return (hash<T1>{}(p.first) << 32) | hash<T2>{}(p.second);
+  }
+};
+// Coin Change 2 - LeetCode
+
+void combination_sum(int T, int index, vector<int> &v, int &count,
+                     vector<int> &path, vec<int> &ans,
+                     unordered_map<pair<int, int>, int, PairHash> &dp) {
   if (T < 0) {
     return;
   }
 
-  if (paths.size() > 1) {
+  if (dp.find({T, index}) != dp.end()) {
+    count += dp[{T, index}];
+    return;
+  }
+
+  if (count > 1) {
     return;
   }
 
   if (T == 0) {
-    sort(path.begin(), path.end());
-    paths.insert(path);
+    count++;
+    ans = path;
     return;
   }
 
   for (int i = index; i < v.size(); i++) {
     path.push_back(i + 1);
-    vector<int> path_copy(path);
-    combination_sum(T - v[i], i, v, paths, path_copy);
+    combination_sum(T - v[i], i, v, count, path, ans, dp);
+    dp[{T, i}] = count;
     path.pop_back();
   }
 }
@@ -61,16 +76,18 @@ int32_t main() {
   // solve for each testcases
   for (int i = 0; i < M; i++) {
     vec<int> path_dummy;
+    vec<int> ans;
 
-    set<vec<int>> paths; // outputs all the paths with maximum profit
-    combination_sum(t[i], 0, v, paths, path_dummy);
+    unordered_map<pair<int, int>, int, PairHash> dp;
+    int count = 0;
+    combination_sum(t[i], 0, v, count, path_dummy, ans, dp);
 
-    if (paths.size() == 0)
+    if (count == 0)
       cout << "Impossible" << endl;
-    else if (paths.size() > 1)
+    else if (count > 1)
       cout << "Ambiguous" << endl;
     else {
-      for (auto x : *paths.begin()) {
+      for (auto x : ans) {
         cout << x << " ";
       }
       cout << endl;

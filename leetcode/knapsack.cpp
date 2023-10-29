@@ -9,9 +9,11 @@
 
 using namespace std;
 
-int knapsack_unbounded(vector<int> &w, vector<int> &p,
-                       unordered_map<int, int> &memo,
-                       unordered_map<int, int> &prev, int size) {
+// related to combination sum
+
+int knapsack_unbounded2(vector<int> &w, vector<int> &p,
+                        unordered_map<int, int> &memo,
+                        unordered_map<int, int> &prev, int size) {
   if (size < 0)
     return numeric_limits<int>::min();
   if (size == 0)
@@ -25,7 +27,7 @@ int knapsack_unbounded(vector<int> &w, vector<int> &p,
   int selected_item = -1;
 
   for (int i = 0; i < w.size(); i++) {
-    int temp = knapsack_unbounded(w, p, memo, prev, size - w[i]) + p[i];
+    int temp = knapsack_unbounded2(w, p, memo, prev, size - w[i]) + p[i];
 
     if (temp > maximum) {
       maximum = temp;
@@ -95,7 +97,7 @@ int main() {
   unordered_map<int, int> memo_unbound;
 
   int profit_unbounded =
-      knapsack_unbounded(w, p, memo_unbound, prev_unbound, size);
+      knapsack_unbounded2(w, p, memo_unbound, prev_unbound, size);
   cout << "Profit: " << profit_unbounded << endl;
 
   // unordered_map<int, int> prev_knapsacke
