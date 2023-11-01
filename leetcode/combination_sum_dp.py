@@ -34,7 +34,6 @@ class Solution:
     def combinationSum3(self, coins: list[int], target: int) -> list[list[int]]:
         dp = [[] for _ in range(target+1)] # make a list of lists
         for c in coins:                                  # O(N): for each candidate
-            print(dp)
             for i in range(c, target+1):                      # O(M): for each possible value <= target
                 if i == c:
                     dp[i].append([c])
