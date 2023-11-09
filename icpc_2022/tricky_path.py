@@ -13,7 +13,7 @@ def minimum_distance_to_cover_all_districts(N, distances):
         total_distance = 0
 
         is_valid_path = all(
-            # check if the distance between two adjacent districts is less than 1000
+            # check if the distance between two adjacent districts is <= 1000
             distances[perm[i]][perm[i + 1]] <= 1000
             for i in range(N - 1)
         )

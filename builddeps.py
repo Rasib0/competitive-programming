@@ -1,4 +1,5 @@
 import sys
+
 lines = sys.stdin.read().splitlines()
 
 # inputs
@@ -8,13 +9,14 @@ graph = {}
 for i in range(N):
     line = lines[1 + i]
     key, neighours = line.split(":")
-    if neighours != '':
+    if neighours != "":
         graph[key] = neighours.strip().split(" ")
 
 
 start = lines[N + 1]
 
 # solution
+
 
 def invert_map(map):
     inverted_map = {}
@@ -28,12 +30,15 @@ def invert_map(map):
                 inverted_map[neighbour].append(key)
     return inverted_map
 
+
 inverted_graph = invert_map(graph)
 
 visited = {}
 
+
 def bfs():
     from collections import deque
+
     queue = deque()
     queue.append(start)
     visited[start] = True
@@ -50,8 +55,7 @@ def bfs():
                 filter_neighours += [i]
                 visited[i] = True
 
-
-        queue += filter_neighours 
+        queue += filter_neighours
 
 
 bfs()
