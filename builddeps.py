@@ -21,8 +21,6 @@ start = lines[N + 1]
 def invert_map(map):
     inverted_map = {}
     for key, neighbours in map.items():
-        if key not in inverted_map:
-            inverted_map[key] = []
         for neighbour in neighbours:
             if neighbour not in inverted_map:
                 inverted_map[neighbour] = [key]
@@ -33,4 +31,25 @@ def invert_map(map):
 
 inverted_graph = invert_map(graph)
 
-print(inverted_graph)
+
+def toposort(graph):
+    output = []
+    visited = set()
+
+    def dfs(node):
+        if node in visited:
+            return
+        for neighour in graph.get(node, []):
+            dfs(neighour)
+
+        visited.add(node)
+        output.append(node)
+
+    dfs(start)
+    return output
+
+
+for i in reversed(toposort(inverted_graph)):
+    print(i)
+
+# code works but you might have to increase the stack limit...
