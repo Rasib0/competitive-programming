@@ -7,7 +7,7 @@ N = int(lines[0])
 
 graph = {}
 for i in range(N):
-    line = lines[1 + i]
+    line = lines[1 + i].strip()
     key, neighours = line.split(":")
     if neighours != "":
         graph[key] = neighours.strip().split(" ")
@@ -15,7 +15,7 @@ for i in range(N):
 
 start = lines[N + 1]
 
-# solution
+# remove nodes without any dependencies
 
 
 def invert_map(map):
@@ -33,29 +33,4 @@ def invert_map(map):
 
 inverted_graph = invert_map(graph)
 
-visited = {}
-
-
-def bfs():
-    from collections import deque
-
-    queue = deque()
-    queue.append(start)
-    visited[start] = True
-
-    while queue:
-        key = queue.popleft()
-        print(key)
-        neighours = inverted_graph[key]
-
-        filter_neighours = []
-
-        for i in neighours:
-            if i not in visited:
-                filter_neighours += [i]
-                visited[i] = True
-
-        queue += filter_neighours
-
-
-bfs()
+print(inverted_graph)
