@@ -30,45 +30,38 @@ def invert_map(map):
 
 inverted_graph = invert_map(graph)
 
-def dfs():
-    stack = []
-    stack.append(start)
-    visited = dict()
-    out = [start]
+
+def toposort(graph):
+    from collections import defaultdict
+
+    stack = [start]
+    output = []
+    visited = defaultdict(lambda: False)
 
     while stack:
-        key = stack.pop()
-        neighours = inverted_graph[key]
+        top = stack.pop()
+        output.append(top)
 
-        visited[key] = True
-        for i in neighours:
-                if i in visited:
-                    continue
-                out.append(i)
-                stack.append(i)
-                visited[i] = True
+        if visited[top]:
+            continue
 
-    for i in out:
+
+        visited[top] = True
+
+        for n in inverted_graph[top]:
+            stack.append(n)
+
+    printed = defaultdict(lambda: False)
+    output2 = []
+
+    for i in reversed(output):
+        if not printed[i]:
+            output2.append(i)
+            printed[i] = True
+
+    for i in reversed(output2):
         print(i)
 
 
-def dfs2():
-    out = []
-    visited = {}
+toposort(inverted_graph)
 
-    def dfs_util(key):
-        if key in visited:
-            return
-        neighours = inverted_graph[key]
-        for i in neighours:
-            dfs_util(i)
-
-        visited[key] = True
-        out.append(key)
-
-    dfs_util(start)
-
-    for i in reversed(out):
-        print(i)
-
-dfs()
