@@ -1,8 +1,5 @@
-6
-gmp:
-solution: set map queue
-base:
-set: base gmp
-map: base gmp
-queue: base
-gmp
+3
+Uptown Midtown
+Midtown Uptown Downtown
+Downtown Midtown
+Uptown Downtown
