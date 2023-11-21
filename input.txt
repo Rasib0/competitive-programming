@@ -1,9 +1,16 @@
-5
-battery_acid
-drain_cleaner
-antifreeze
-cold_medicine
-lantern_fuel
-2
-cold_medicine battery_acid
-antifreeze lantern_fuel
+3 3
+0 1
+1 2
+2 0
+3 3
+0 1
+1 2
+0 2
+3 2
+1 2
+0 2
+4 4
+0 1
+1 2
+2 3
+0 3
