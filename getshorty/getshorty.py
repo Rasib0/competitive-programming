@@ -1,6 +1,6 @@
 def not_so_dijkstra_for_factors(adj_list, n):
     # returns least factor path to all nodes from 0
-    # uses a priority queue (max heap)
+    # uses a  max priority queue (max heap)
     # similar to dijkstra but instead of adding distances, we multiply them
     import heapq
 
