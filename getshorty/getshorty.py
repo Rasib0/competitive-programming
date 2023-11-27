@@ -1,31 +1,41 @@
-from collections import defaultdict
+def not_so_dijkstra_for_factors(adj_list, n):
+    # returns least factor path to all nodes from 0
+    # uses a priority queue (max heap)
+    # similar to dijkstra but instead of adding distances, we multiply them
+    import heapq
+
+    visited = [False] * n
+    pq = [(-1, 0)]
+    ans = [0] * n
+
+    while pq:
+        prev_f, n1 = heapq.heappop(pq)
+
+        if visited[n1]:
+            continue
+
+        ans[n1] = -prev_f
+        visited[n1] = True
+
+        for n2, f in adj_list[n1]:
+            if not visited[n2]:
+                heapq.heappush(pq, (prev_f * f, n2))
+    return ans
+
+
 while True:
-    n, m = [int(j) for j in input().split()] # number of intersections
+    n, m = [int(j) for j in input().split()]  # number of intersections
 
     if n == 0 and m == 0:
         break
 
-    graph = defaultdict(defaultdict)
+    adj = [[] for _ in range(n)]
 
     for i in range(m):
-        x, y, f = [float(j) for j in input().split()] # corridor between x and y
-        graph[x][y] = f
+        x, y, f = input().split()  # corridor between x and y
+        adj[int(x)] += [(int(y), float(f))]
+        adj[int(y)] += [(int(x), float(f))]
 
-    import heapq
+    distances = not_so_dijkstra_for_factors(adj, n)
 
-    def dijkstra(graph, start):
-        distances = {node: float('infinity') for node in graph}
-        distances[start] = 0
-        pq = [(0, start)]
-        while pq:
-            current_distance, current_node = heapq.heappop(pq)
-            if current_distance > distances[current_node]:
-                continue
-            for neighbor, weight in graph[current_node].items():
-                distance = current_distance + weight
-                if distance < distances[neighbor]:
-                    distances[neighbor] = distance
-                    heapq.heappush(pq, (distance, neighbor))
-        return distances
-
-    distances = dijkstra(graph, 0)
+    print(f"{distances[n - 1]:.4f}")
