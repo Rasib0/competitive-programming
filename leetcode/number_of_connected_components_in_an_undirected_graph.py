@@ -9,7 +9,6 @@ class Solution:
             while res != par[res]:
                 par[res] = par[par[res]]
                 res = par[res]
-
             # add path compression here to make the tree flat TODO
             return res
 
