@@ -7,3 +7,4 @@ def get_input():
 
 strings = get_input()
 print(strings)
+# we need to find the smallest prefix after which the string starts repeating itself
