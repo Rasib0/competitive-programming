@@ -1,10 +1,23 @@
-def get_input():
-    import sys
+import sys
 
-    strings = sys.stdin.read().splitlines()[:-1]
-    return strings
+outputs = []
 
+k = 0
+while True:
+    line = sys.stdin.readline().strip()
 
-strings = get_input()
-print(strings)
-# we need to find the smallest prefix after which the string starts repeating itself
+    if line == ".":
+        break
+
+    count = 0
+    length = len(line)
+
+    for i in range(1, length + 1):
+        if length % i != 0:
+            continue
+
+        if line[-i:] * int(length / i) == line:
+            count = int(length / i)
+            break
+
+    print(count)
