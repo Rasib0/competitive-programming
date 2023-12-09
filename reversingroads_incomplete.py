@@ -2,7 +2,6 @@ from collections import defaultdict
 import sys
 
 lines = sys.stdin.read().splitlines()
-# print(lines)
 
 
 def make_graph_from_edges(edge_list):
@@ -12,42 +11,102 @@ def make_graph_from_edges(edge_list):
     return graph
 
 
-def kosaraju(graph):
-    # step 1: dfs on the graph, to mark visited nodes and add them to the stack
-    # step 2: transpose the graph
-    # step 3: dfs on the transposed graph
-    # step 4: count the number of times dfs is called
-    if len(graph) == 0:
-        return True
+# ATTEMPT 1
+def count_scc_clean_code_dirty_implementation(graph):
+    """
+    Kosaraju's algorithm
+    step 1: dfs on the graph, to mark visited nodes and add them to the stack
+    step 2: transpose the graph
+    step 3: dfs on the transposed graph for every unvisited node until the stack is empty
+    step 4: count the number of times dfs is called
+    """
+
+    def dfs(node, graph, o_stack, o_visited):
+        o_visited.add(node)
+        for neighbor in graph[node]:
+            if neighbor not in o_visited:
+                dfs(neighbor, graph, o_stack, o_visited)
+        o_stack.append(node)
+
+    def transpose(graph):
+        transposed = defaultdict(list)
+        for node in graph:
+            for neighbor in graph[node]:
+                transposed[neighbor].append(node)
+        return transposed
+
+    if not graph:
+        return 1
+
     stack = []
     visited = set()
 
-    def mark_reachable_dfs(node, input_graph, output_stack, output_visited):
-        output_visited.add(node)
-        for child in input_graph[node]:
-            if child not in visited:
-                mark_reachable_dfs(child, input_graph, output_stack, output_visited)
-        output_stack.append(node)
+    for vertex in list(graph):
+        if vertex not in visited:
+            dfs(vertex, graph, stack, visited)
+
+    transpose_graph = transpose(graph)
+    visited.clear()
+    scc = 0
+
+    while len(visited) < len(graph):  # or while stack (both works)
+        node = stack.pop()
+        if node not in visited:
+            dfs(node, transpose_graph, [], visited)  # we don't need the stack here
+            scc += 1
+    return scc
+
+
+# ATTEMPT 2: more readable
+def count_scc(graph):
+    """
+    Kosaraju's algorithm
+    step 1: dfs on the graph, to mark visited nodes and add them to the stack
+    step 2: transpose the graph
+    step 3: dfs on the transposed graph for every unvisited node until the stack is empty
+    step 4: count the number of times dfs is called
+    """
+
+    def dfs(node, graph, o_stack, o_visited):
+        o_visited.add(node)
+        for neighbor in graph[node]:
+            if neighbor not in o_visited:
+                dfs(neighbor, graph, o_stack, o_visited)
+        o_stack.append(node)
+
+    def dfs_scc(node, in_graph, o_visited):
+        o_visited.add(node)
+        for neighbor in in_graph[node]:
+            if neighbor not in o_visited:
+                dfs_scc(neighbor, in_graph, o_visited)
 
     def transpose(graph):
-        rev_graph = defaultdict(list)
+        transposed = defaultdict(list)
         for node in graph:
-            for child in graph[node]:
-                rev_graph[child].append(node)
-        return rev_graph
+            for neighbor in graph[node]:
+                transposed[neighbor].append(node)
+        return transposed
 
-    first_node = list(graph.keys())[0]
+    if not graph:
+        return 1
 
-    mark_reachable_dfs(first_node, graph, stack, visited)
-    rev_graph = transpose(graph)
+    stack = []
+    visited = set()
 
-    scc = 0
+    for vertex in list(graph):
+        if vertex not in visited:
+            dfs(vertex, graph, stack, visited)
+
+    transpose_graph = transpose(graph)
     visited.clear()
-    while len(visited) < len(graph):
-        node = stack.pop()
-        mark_reachable_dfs(node, rev_graph, [], visited)  # we don't need the stack here
-        scc += 1
+    scc = 0
 
+    while len(visited) < len(graph):  # or while stack (both works)
+        node = stack.pop()
+        if node not in visited:
+            # could just use dfs with [] stack
+            dfs_scc(node, transpose_graph, visited)  # we don't need the stack here
+            scc += 1
     return scc
 
 
@@ -66,7 +125,7 @@ while i < len(lines):
         edge_list.append((fro, to))
     i += n
 
-    if kosaraju(graph) == 1:
+    if count_scc(graph) == 1:
         print(f"Case {case}: valid")
     else:
         for j in range(len(edge_list)):
@@ -74,7 +133,7 @@ while i < len(lines):
             edge_list_copy[j] = (edge_list[j][1], edge_list[j][0])
             new_graph = make_graph_from_edges(edge_list_copy)
 
-            if kosaraju(new_graph) == 1:
+            if count_scc(new_graph) == 1:
                 print(f"Case {case}: {edge_list[j][0]} {edge_list[j][1]}")
                 break
         else:
