@@ -1,54 +1,37 @@
-from collections import defaultdict
+from collections import defaultdict, deque
 
 n = int(input())
-nodes = [input() for i in range(n)]
-
+nodes = [input() for _ in range(n)]
 m = int(input())
+edges = [input().split() for _ in range(m)]
 
-graph = defaultdict(lambda: [])
 
-for i in range(m):
-    x, y = input().split()
-    graph[x].append(y)
-    graph[y].append(x)
-    
-#print(nodes)
-#print(graph)
+adj_list = defaultdict(list)
 
-# our visited array is called colored
-# it will store the color
-# The three color value are -1, 0, 1
-# -1 means unvisited, 0 and 1 refer to blue and red respectively
-colored = {}
-def bfs(start):
-    from collections import deque
-    q = deque()
-    q.append(start)
-    colored[start] = 0
-    while q:
-        top = q.popleft()
-        for nei in graph[top]:
-            # if a neighbor is already colored check if they match else return impossible
-            if not nei in colored:
-                q.append(nei)
-                colored[nei] = 1 - colored[top]
-            else:
-                if colored[nei] == colored[top]:
-                    print("impossible")
-                    exit()    
+for i in edges:
+    adj_list[i[0]].append(i[1])
+    adj_list[i[1]].append(i[0])
 
-for n in nodes:
-    if n not in colored:
-        bfs(n)
-        
-blue = []
-red = []
-for k, color in colored.items():
-    if color == 0:
-        blue.append(k)
-    else:
-        red.append(k)
 
-print(*blue)
-print(*red)
-        
+stack = deque()
+visited = {n: False for n in nodes}
+colored_blue = {n: True for n in nodes}
+stack.extend(nodes)
+
+while stack:
+    node = stack.pop()
+    visited[node] = True
+    for neighbor in adj_list[node]:
+        if visited[neighbor] and colored_blue[neighbor] == colored_blue[node]:
+            print("impossible")
+            exit()
+        if visited[neighbor]:
+            continue
+        stack.append(neighbor)
+        colored_blue[neighbor] = not colored_blue[node]
+
+blue = filter(lambda n: colored_blue[n], nodes)
+red = filter(lambda n: not colored_blue[n], nodes)
+
+print(*list(blue))
+print(*list(red))
