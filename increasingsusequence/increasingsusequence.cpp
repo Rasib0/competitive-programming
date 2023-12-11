@@ -5,7 +5,6 @@
 #define int long long int
 
 using namespace std;
-
 // assumption b: is smaller than a
 bool b_is_earlier(vector<int> &a, vector<int> &b) {
   for (int i = 0; i < b.size(); i++) {
