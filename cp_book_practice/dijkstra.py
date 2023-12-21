@@ -15,6 +15,7 @@ class Solution:
             if n1 in answer:  # greedy so once we find the shortest path, we can stop
                 continue
             answer[n1] = w1
+
             for n2, w2 in adj[n1]:  # wtf
                 if n2 not in answer:
                     heapq.heappush(minheap, (w1 + w2, n2))
