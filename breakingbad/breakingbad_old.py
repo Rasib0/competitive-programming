@@ -29,7 +29,7 @@ def bfs(start):
         top = q.popleft()
         for nei in graph[top]:
             # if a neighbor is already colored check if they match else return impossible
-            if not nei in colored:
+            if nei not in colored:
                 q.append(nei)
                 colored[nei] = 1 - colored[top]
             else:
