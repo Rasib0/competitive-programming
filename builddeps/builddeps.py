@@ -31,7 +31,7 @@ def invert_map(map):
 
 inverted_graph = invert_map(graph)
 
-
+# topological sort
 def toposort(graph):
     output = []
     visited = set()
@@ -52,4 +52,4 @@ def toposort(graph):
 for i in reversed(toposort(inverted_graph)):
     print(i)
 
-# code works but you might have to increase the stack limit...
+# code works but only if you increase stack limit.
