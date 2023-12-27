@@ -74,7 +74,6 @@ int knapsack_topdown(vector<int> &w, vector<int> &p,
 int knapsack_bottomup(vector<int> &w, vector<int> &p, vector<vector<int>> &memo,
                       int size, int n) {
   for (int i = 0; i <= n; i++) {
-
     for (int j = 0; j <= size; j++) {
       if (i == 0 or j == 0)
         memo[i][j] = 0;
